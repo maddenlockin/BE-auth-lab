@@ -21,6 +21,16 @@ describe('auth lab routes', () => {
             });
     });
 
+    it('verifies 400 message when email already exists', async () => {
+        await request(app)
+            .post('/api/auth/signup')
+            .send({ email: 'dani@duck.com', password: 'passin' });
+        return request(app)
+            .post('/api/auth/signup')
+            .send({ email: 'dani@duck.com', password: 'failin' })
+            .then((res) => expect(res.status).toEqual(400));
+    });
+
     afterAll(() => {
         pool.end();
     });
