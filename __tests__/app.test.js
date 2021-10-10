@@ -46,6 +46,16 @@ describe('auth lab routes', () => {
             );
     });
 
+    it('verifies 401 message credentials do not pass', async () => {
+        await request(app)
+            .post('/api/v1/auth/login')
+            .send({ email: 'dani@duck.com', password: 'passin' });
+        return request(app)
+            .post('/api/v1/auth/login')
+            .send({ email: 'dani@duck.com', password: 'failin' })
+            .then((res) => expect(res.status).toEqual(401));
+    });
+
     afterAll(() => {
         pool.end();
     });
