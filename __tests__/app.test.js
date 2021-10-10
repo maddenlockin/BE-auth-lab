@@ -56,6 +56,17 @@ describe('auth lab routes', () => {
             .then((res) => expect(res.status).toEqual(401));
     });
 
+    it('verifies get route that responds with currently logged in user', async () => {
+        const agent = request.agent(app);
+        await agent.post('/api/v1/auth/signup')
+            .send({ email: 'dani@duck.com', password: 'p4ssw0rd' });
+        await agent.post('/api/v1/auth/login')
+            .send({ email: 'dani@duck.com', password: 'p4ssw0rd' });
+        const res = await agent
+            .get('/api/v1/auth/me');
+        expect(res.body).toEqual({ id: '1' });
+    });
+
     afterAll(() => {
         pool.end();
     });
