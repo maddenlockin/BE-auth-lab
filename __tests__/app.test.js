@@ -23,10 +23,10 @@ describe('auth lab routes', () => {
 
     it('verifies 400 message when email already exists', async () => {
         await request(app)
-            .post('/api/auth/signup')
+            .post('/api/v1/auth/signup')
             .send({ email: 'dani@duck.com', password: 'passin' });
         return request(app)
-            .post('/api/auth/signup')
+            .post('/api/v1/auth/signup')
             .send({ email: 'dani@duck.com', password: 'failin' })
             .then((res) => expect(res.status).toEqual(400));
     });
@@ -35,10 +35,15 @@ describe('auth lab routes', () => {
         await request(app)
             .post('/api/v1/auth/signup')
             .send({ email: 'dani@duck.com', password: 'p4ssw0rd' });
+
         return request(app)
-            .post('/api/auth/login')
+            .post('/api/v1/auth/login')
             .send({ email: 'dani@duck.com', password: 'p4ssw0rd' })
-            .then((res) => expect(res.body).toEqual({ id: '1' }));
+            .then((res) => {
+                console.log('0000', res.body);
+                expect(res.body).toEqual('1');
+            }
+            );
     });
 
     afterAll(() => {
