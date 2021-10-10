@@ -15,7 +15,7 @@ describe('auth lab routes', () => {
             .send({ email: 'dani@duck.com', password: 'p4ssw0rd' })
             .then((res) => {
                 expect(res.body).toEqual({
-                    id: expect.any(String),
+                    id: '1',
                     email: 'dani@duck.com',
                 });
             });
@@ -29,6 +29,16 @@ describe('auth lab routes', () => {
             .post('/api/auth/signup')
             .send({ email: 'dani@duck.com', password: 'failin' })
             .then((res) => expect(res.status).toEqual(400));
+    });
+
+    it('logs in a user and returns the user id', async () => {
+        await request(app)
+            .post('/api/v1/auth/signup')
+            .send({ email: 'dani@duck.com', password: 'p4ssw0rd' });
+        return request(app)
+            .post('/api/auth/login')
+            .send({ email: 'dani@duck.com', password: 'p4ssw0rd' })
+            .then((res) => expect(res.body).toEqual({ id: '1' }));
     });
 
     afterAll(() => {
