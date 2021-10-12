@@ -12,11 +12,12 @@ describe('auth lab routes', () => {
     it('verifies POST route to sign up user', async () => {
         return request(app)
             .post('/api/v1/auth/signup')
-            .send({ email: 'dani@duck.com', password: 'p4ssw0rd' })
+            .send({ email: 'dani@duck.com', password: 'p4ssw0rd', roleTitle: 'USER' })
             .then((res) => {
                 expect(res.body).toEqual({
                     id: '1',
                     email: 'dani@duck.com',
+                    role: 'USER'
                 });
             });
     });
@@ -40,7 +41,7 @@ describe('auth lab routes', () => {
             .post('/api/v1/auth/login')
             .send({ email: 'dani@duck.com', password: 'p4ssw0rd' })
             .then((res) => {
-                console.log('0000', res.body);
+                //console.log('0000', res.body);
                 expect(res.body).toEqual('1');
             }
             );
@@ -64,8 +65,10 @@ describe('auth lab routes', () => {
             .send({ email: 'dani@duck.com', password: 'p4ssw0rd' });
         const res = await agent
             .get('/api/v1/auth/me');
-        expect(res.body).toEqual({ id: '1' });
+        expect(res.body).toEqual({ id: '1', exp: expect.any(Number), iat: expect.any(Number) });
     });
+
+    xit('');
 
     afterAll(() => {
         pool.end();
